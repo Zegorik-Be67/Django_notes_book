@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Добавить запись</title>
+</head>
+<body>
+<h2>Добавить запись</h2>
+<form method="post">
+    {% csrf_token %}
+    <p>Запись: {{ form.note }}</p>
+    <button type="submit">Добавить запись</button>
+</form>
+<a href="{% url 'notes:home' %}">
+    <button>Вернуться</button>
+</a>
+</body>
+</html>

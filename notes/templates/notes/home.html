@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Notes book</title>
+</head>
+<body>
+
+{% if user.is_authenticated %}
+    <p>Пользователь: {{ user.username }}</p>
+    <form method="post" action="{% url 'logout' %}">
+        {% csrf_token %}
+        <button>Выйти</button>
+    </form>
+{% else %}
+    <a href="{% url 'register:login' %}">
+        <button>Войти</button>
+    </a>
+{% endif %}
+
+<a href="{% url 'notes:add_note' %}">
+    <button>Добавить запись</button>
+</a>
+{% for n in notes %}
+    <ul>
+        <li>
+            <p>{{ forloop.counter }}. {{ n.note}}</p>
+            <p>
+                Теги:
+                {% for tag in n.tags.all %}
+                    <span>{{ tag.tags }}</span>
+                {% empty %}
+                    <span>Тегов нет</span>
+                {% endfor %}
+            </p>
+            <p>{{ n.created_at }}</p>
+            <a href="{% url 'notes:edit_note' n.id %}">
+                <button>Редактировать</button>
+            </a>
+            <form method="post" action="{% url 'notes:delete_note' n.id %}">
+                {% csrf_token %}
+                <button>Удалить</button>
+            </form>
+            <br>
+        </li>
+    </ul>
+{% empty %}
+    <p>Записей нет</p>
+{% endfor %}
+</body>
+</html>

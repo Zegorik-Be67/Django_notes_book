@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+{% if user.is_authenticated %}
+    <p>Пользователь уже зарегистрирован</p>
+    <a href="{% url 'notes:home' %}">
+        <button>Вернуться</button>
+    </a>
+{% else %}
+    <form method="post">
+        {% csrf_token %}
+    <div>
+        {{ form.username.label_tag }}
+        {{ form.username }}
+        {{ form.username.error }}
+    </div>
+    <div>
+        {{ form.email.label_tag }}
+        {{ form.email }}
+        {{ form.email.error }}
+    </div>
+    <div>
+        {{ form.password1.label_tag }}
+        {{ form.password1 }}
+        {{ form.password1.error }}
+    </div>
+    <div>
+        {{ form.password2.label_tag }}
+        {{ form.password2 }}
+        {{ form.password2.error }}
+    </div>
+        <button type="submit">Зарегистрироваться</button>
+    </form>
+    <a href="{% url 'login' %}">
+        <button>Войти</button>
+    </a>
+{% endif %}
+</body>
+</html>

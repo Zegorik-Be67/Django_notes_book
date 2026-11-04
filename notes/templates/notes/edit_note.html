@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Редактировать</title>
+</head>
+<body>
+<h2>Редактировать запись</h2>
+<form method="post">
+    {% csrf_token %}
+    <p>{{ form.note}}</p>
+    <p>{{ form.created_at }}</p>
+    <p>{{ form.tags }}</p>
+    <button type="submit" name="save_note">Сохранить</button>
+    <br>
+    <input type="text" name="new_tag" placeholder="Новый тэг">
+    <button type="submit" name="add_tag">Добавить</button>
+</form>
+<br>
+<a href="{% url 'notes:home' %}">
+    <button>Вернуться на главную</button>
+</a>
+</body>
+</html>
