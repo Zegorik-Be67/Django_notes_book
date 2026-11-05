@@ -21,6 +21,12 @@
 <a href="{% url 'notes:add_note' %}">
     <button>Добавить запись</button>
 </a>
+
+<form method="get">
+    <input type="search" name="search" value="#{{ search }}" placeholder="Найти по тегу">
+    <button>Найти</button>
+</form>
+
 {% for n in notes %}
     <ul>
         <li>

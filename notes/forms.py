@@ -8,12 +8,12 @@ from .models import Notes, Tags
 class NotesForm(ModelForm):
     class Meta:
         model = Notes
-        fields = ['tags', 'note']
+        fields = ['name', 'note']
 
 class TagsForm(ModelForm):
     class Meta:
         model = Tags
-        fields = ['tags']
+        fields = ['name']
 
 class LoginForm(AuthenticationForm):
     username = forms.CharField(label='Username', widget=forms.TextInput())

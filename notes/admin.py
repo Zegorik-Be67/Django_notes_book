@@ -8,4 +8,4 @@ class NotesAdmin(admin.ModelAdmin):
 
 @admin.register(Tags)
 class TagsAdmin(admin.ModelAdmin):
-    list_display = ('id', 'tags')
+    list_display = ('id', 'name')

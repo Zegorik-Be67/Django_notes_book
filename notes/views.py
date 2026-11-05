@@ -7,7 +7,10 @@ from .models import Notes, Tags
 @login_required
 def home(request):
     notes = Notes.objects.filter(user_id=request.user)
-    return render(request, 'notes/home.html', {'notes': notes})
+    search = request.GET.get('search', '').strip()
+    if search:
+        notes = notes.filter(tags__name=search)
+    return render(request, 'notes/home.html', {'notes': notes, 'search': search})
 
 @login_required
 def add_note(request):
@@ -31,7 +34,7 @@ def edit_note(request, pk):
         if 'add_tag' in request.POST:
             tag_name = request.POST.get('new_tag')
             if tag_name:
-                Tags.objects.get_or_create(tags=tag_name)
+                Tags.objects.get_or_create(name=tag_name)
                 return redirect('notes:edit_note', pk=note.pk)
         elif 'save_note' in request.POST:
             form = NotesForm(request.POST, instance=note)
