@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+{% if user.is_authenticated %}
+    <p>Пользователь: {{ user.username }}</p>
+    <form method="post" action="{% url 'logout' %}">
+        {% csrf_token %}
+        <button>Выйти</button>
+    </form>
+    <a href="{% url 'notes:home' %}">
+        <button>Войти в личный кабинет</button>
+    </a>
+{% else %}
+    <a href="{% url 'login' %}">
+        <button>Войти</button>
+    </a>
+{% endif %}
+
+{% for n in notes %}
+    <ul>
+        <li>
+            <p>{{ n.user }}</p>
+            <p>{{ n.note }}</p>
+            <p>{{ n.created_at }}</p>
+        </li>
+    </ul>
+{% empty %}
+    <p>Записей нет</p>
+{% endfor %}
+
+<form method="post">
+    {% csrf_token %}
+    <input type="text" name="input" placeholder="Напишите что-нибудь">
+    <button type="submit" name="add_text">Отправить</button>
+</form>
+</body>
+</html>

@@ -9,9 +9,13 @@ class Tags(models.Model):
 
 class Notes(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
-    name = models.ManyToManyField(Tags, blank=True)
+    tags = models.ManyToManyField(Tags, blank=True, related_name='notes')
     note = models.TextField()
     created_at = models.DateTimeField(auto_now_add=True)
+    is_private = models.BooleanField(default=False)
+
+    class Meta:
+        ordering = ['-created_at']
 
     def __str__(self):
         return f'{self.id}: {self.note} - {self.created_at}'

@@ -9,7 +9,11 @@
 <form method="post">
     {% csrf_token %}
     <p>Запись: {{ form.note }}</p>
-    <button type="submit">Добавить запись</button>
+    <p>Теги:</p>
+    <input type="text" name="new_tag" placeholder="Новый тег">
+    <button type="submit" name="add_tag">Добавить</button>
+    <p>{{ form.tags }}</p>
+    <button type="submit" >Добавить запись</button>
 </form>
 <a href="{% url 'notes:home' %}">
     <button>Вернуться</button>

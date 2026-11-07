@@ -134,5 +134,5 @@ MAILERS = {
 }
 
 LOGIN_URL = 'login'
-LOGIN_REDIRECT_URL = 'notes:home'
-LOGOUT_REDIRECT_URL = 'notes:home'
+LOGIN_REDIRECT_URL = 'notes:forum'
+LOGOUT_REDIRECT_URL = 'notes:forum'

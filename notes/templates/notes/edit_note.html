@@ -10,10 +10,10 @@
     {% csrf_token %}
     <p>{{ form.note}}</p>
     <p>{{ form.created_at }}</p>
-    <p>{{ form.tags }}</p>
+    <p>Теги: {{ form.tags }}</p>
     <button type="submit" name="save_note">Сохранить</button>
     <br>
-    <input type="text" name="new_tag" placeholder="Новый тэг">
+    <input type="text" name="new_tag" placeholder="Новый тег">
     <button type="submit" name="add_tag">Добавить</button>
 </form>
 <br>

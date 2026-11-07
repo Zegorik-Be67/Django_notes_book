@@ -8,7 +8,10 @@ from .models import Notes, Tags
 class NotesForm(ModelForm):
     class Meta:
         model = Notes
-        fields = ['name', 'note']
+        fields = ['tags', 'note']
+        widgets = {
+            'tags': forms.CheckboxSelectMultiple,
+        }
 
 class TagsForm(ModelForm):
     class Meta:

@@ -5,25 +5,12 @@
     <title>Notes book</title>
 </head>
 <body>
-
-{% if user.is_authenticated %}
-    <p>Пользователь: {{ user.username }}</p>
-    <form method="post" action="{% url 'logout' %}">
-        {% csrf_token %}
-        <button>Выйти</button>
-    </form>
-{% else %}
-    <a href="{% url 'register:login' %}">
-        <button>Войти</button>
-    </a>
-{% endif %}
-
 <a href="{% url 'notes:add_note' %}">
     <button>Добавить запись</button>
 </a>
 
 <form method="get">
-    <input type="search" name="search" value="#{{ search }}" placeholder="Найти по тегу">
+    <input type="search" name="search" value="{{ search }}" placeholder="Найти по тегу">
     <button>Найти</button>
 </form>
 
@@ -34,7 +21,7 @@
             <p>
                 Теги:
                 {% for tag in n.tags.all %}
-                    <span>{{ tag.tags }}</span>
+                    <span>{{ tag.name }}</span>
                 {% empty %}
                     <span>Тегов нет</span>
                 {% endfor %}
@@ -53,5 +40,19 @@
 {% empty %}
     <p>Записей нет</p>
 {% endfor %}
+
+<div>
+    {% if notes.has_previous %}
+        <a href="?page={{ notes.previous_page_number }}">Назад</a>
+    {% endif %}
+    <p>Страница {{ notes.number }} из {{ notes.paginator.num_pages }}</p>
+    {% if notes.has_next %}
+        <a href="?page={{ notes.next_page_number }}">Вперёд</a>
+    {% endif %}
+</div>
+
+<a href="{% url 'notes:forum' %}">
+    <button>Вернуться</button>
+</a>
 </body>
 </html>

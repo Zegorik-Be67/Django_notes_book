@@ -22,7 +22,7 @@ from notes.forms import LoginForm
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('', notes_views.home , name='home'),
+    path('', notes_views.ForumView.as_view() , name='forum'),
 
     path('notes/', include('notes.urls', namespace='notes')),
 
