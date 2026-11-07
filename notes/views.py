@@ -2,7 +2,6 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.core.exceptions import PermissionDenied
 from django.core.paginator import Paginator
 from django.shortcuts import render, redirect, get_object_or_404
-from django.contrib.auth.decorators import login_required
 from django.contrib.auth import login
 from django.views import View
 from .forms import NotesForm, RegistrationForm
@@ -87,7 +86,7 @@ class DeleteNoteView(LoginRequiredMixin, UserNoteMixin, View):
         note.delete()
         return redirect('notes:home')
 
-class RegisterView(LoginRequiredMixin, View):
+class RegisterView(View):
     def get(self, request, *args, **kwargs):
         form = RegistrationForm()
         return render(request, 'notes/register.html', {'form': form})
