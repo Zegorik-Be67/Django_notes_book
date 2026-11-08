@@ -1,3 +1,5 @@
+from urllib import request
+
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.core.exceptions import PermissionDenied
 from django.core.paginator import Paginator
@@ -5,7 +7,7 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth import login
 from django.views import View
 from .forms import NotesForm, RegistrationForm
-from .models import Notes, Tags
+from .models import Notes, Tags, LikedNotes
 
 class UserNoteMixin:
     def get_note(self, request, **kwargs):
@@ -17,7 +19,10 @@ class UserNoteMixin:
 class ForumView(View):
     def get(self, request, *args, **kwargs):
         notes = Notes.objects.filter(is_private=False)
-        return render(request, 'notes/forum.html', {'notes': notes})
+        context = {'notes': notes, 'liked_objects': set()}
+        if request.user.is_authenticated:
+            context['liked_objects'] = set(LikedNotes.objects.filter(user=request.user).values_list('note_id', flat=True))
+        return render(request, 'notes/forum.html', context)
 
     def post(self, request, *args, **kwargs):
         if not request.user.is_authenticated:
@@ -99,3 +104,12 @@ class RegisterView(View):
             return redirect('notes:home')
 
         return render(request, 'notes/register.html', {'form': form})
+
+class LikeNoteView(LoginRequiredMixin, View):
+    def post(self, request, *args, **kwargs):
+        note = get_object_or_404(Notes, pk = kwargs.get('pk'))
+        if 'is_like' in request.POST:
+            LikedNotes.objects.create(user=request.user, note=note)
+        else:
+            LikedNotes.objects.filter(note=note, user=request.user).delete()
+        return redirect('notes:forum')

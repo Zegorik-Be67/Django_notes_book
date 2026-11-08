@@ -1,5 +1,5 @@
 from django.contrib import admin
-from notes.models import Notes, Tags
+from notes.models import Notes, Tags, LikedNotes
 
 @admin.register(Notes)
 class NotesAdmin(admin.ModelAdmin):
@@ -9,3 +9,8 @@ class NotesAdmin(admin.ModelAdmin):
 @admin.register(Tags)
 class TagsAdmin(admin.ModelAdmin):
     list_display = ('id', 'name')
+
+@admin.register(LikedNotes)
+class LikedNotesAdmin(admin.ModelAdmin):
+    list_display = ('id', 'note', 'user', 'liked_at')
+    list_filter = ('liked_at',)

@@ -19,3 +19,19 @@ class Notes(models.Model):
 
     def __str__(self):
         return f'{self.id}: {self.note} - {self.created_at}'
+
+class LikedNotes(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    note = models.ForeignKey(Notes, on_delete=models.CASCADE)
+    liked_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        constraints = [
+            models.UniqueConstraint(
+                fields=['user', 'note'],
+                name='unique_liked_note',
+            )
+        ]
+
+    def __str__(self):
+        return f'{self.user}: {self.note} - {self.liked_at}'
