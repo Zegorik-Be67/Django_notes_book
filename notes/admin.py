@@ -3,7 +3,7 @@ from notes.models import Notes, Tags, LikedNotes
 
 @admin.register(Notes)
 class NotesAdmin(admin.ModelAdmin):
-    list_display = ('id', 'note', 'user', 'created_at')
+    list_display = ('id', 'note', 'user', 'count_likes', 'created_at')
     list_filter = ('created_at',)
 
 @admin.register(Tags)

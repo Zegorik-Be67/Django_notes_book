@@ -11,14 +11,15 @@ class Notes(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     tags = models.ManyToManyField(Tags, blank=True, related_name='notes')
     note = models.TextField()
+    count_likes = models.IntegerField(default=0)
     created_at = models.DateTimeField(auto_now_add=True)
     is_private = models.BooleanField(default=False)
 
     class Meta:
-        ordering = ['-created_at']
+        ordering = ['created_at']
 
     def __str__(self):
-        return f'{self.id}: {self.note} - {self.created_at}'
+        return f'{self.id}: {self.note} - {self.count_likes}, {self.created_at}'
 
 class LikedNotes(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)

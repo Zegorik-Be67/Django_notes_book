@@ -30,7 +30,7 @@
                 <form method="post" action="{% url 'notes:like_note' n.id %}">
                     {% csrf_token %}
                     <label>Лайк</label>
-                    <input type="checkbox" name="is_like" {% if liked_objects and n.id in liked_objects %}checked{% endif %} onchange="this.form.submit()">
+                    <input type="checkbox" name="is_like" {% if n.id in liked_objects %}checked{% endif %} onchange="this.form.submit()"> <span>{{ n.count_likes }}</span>
                 </form>
             {% endif %}
         </li>

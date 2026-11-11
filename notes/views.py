@@ -1,11 +1,11 @@
-from urllib import request
-
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.db.models import F
 from django.core.exceptions import PermissionDenied
 from django.core.paginator import Paginator
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth import login
 from django.views import View
+from django.http import JsonResponse
 from .forms import NotesForm, RegistrationForm
 from .models import Notes, Tags, LikedNotes
 
@@ -18,7 +18,7 @@ class UserNoteMixin:
 
 class ForumView(View):
     def get(self, request, *args, **kwargs):
-        notes = Notes.objects.filter(is_private=False)
+        notes = Notes.objects.filter(is_private=False).select_related('user')
         context = {'notes': notes, 'liked_objects': set()}
         if request.user.is_authenticated:
             context['liked_objects'] = set(LikedNotes.objects.filter(user=request.user).values_list('note_id', flat=True))
@@ -35,7 +35,7 @@ class ForumView(View):
 
 class HomeView(LoginRequiredMixin ,View):
     def get(self, request, *args, **kwargs):
-        notes_list = Notes.objects.filter(user=request.user, is_private=True)
+        notes_list = Notes.objects.filter(user=request.user, is_private=True).prefetch_related('tags')
 
         search = request.GET.get('search', '').strip()
         if search:
@@ -107,9 +107,12 @@ class RegisterView(View):
 
 class LikeNoteView(LoginRequiredMixin, View):
     def post(self, request, *args, **kwargs):
-        note = get_object_or_404(Notes, pk = kwargs.get('pk'))
+        notes = get_object_or_404(Notes, pk = kwargs.get('pk'))
         if 'is_like' in request.POST:
-            LikedNotes.objects.create(user=request.user, note=note)
+            LikedNotes.objects.create(user=request.user, note=notes)
+            Notes.objects.filter(pk=kwargs.get('pk')).update(count_likes=F('count_likes') + 1)
         else:
-            LikedNotes.objects.filter(note=note, user=request.user).delete()
+            if LikedNotes.objects.filter(user=request.user, note=notes).exists():
+                LikedNotes.objects.filter(user=request.user, note=notes).delete()
+                Notes.objects.filter(pk=kwargs.get('pk')).update(count_likes=F('count_likes') - 1)
         return redirect('notes:forum')
