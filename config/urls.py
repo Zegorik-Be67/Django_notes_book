@@ -16,13 +16,17 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.contrib.auth import views as auth_views
-from notes import views as notes_views
+from notes import views as notes_views, api_views
 from django.urls import path, include
 from notes.forms import LoginForm
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', notes_views.ForumView.as_view() , name='forum'),
+    path('notes/drf-notes/', api_views.NotesListApiView.as_view(), name='drf_notes_list'),
+    path('notes/drf-notes/<int:pk>', api_views.NoteOperationsApiView.as_view(), name='drf_note_id'),
+    path('notes/drf-notes/home', api_views.HomeApiView.as_view(), name='drf_notes_home'),
+    path('notes/drf-notes/home/<int:pk>', api_views.HomeOperationsApiView.as_view(), name='drf_notes_home_id'),
 
     path('notes/', include('notes.urls', namespace='notes')),
 

@@ -5,7 +5,6 @@ from django.core.paginator import Paginator
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth import login
 from django.views import View
-from django.http import JsonResponse
 from .forms import NotesForm, RegistrationForm
 from .models import Notes, Tags, LikedNotes
 
