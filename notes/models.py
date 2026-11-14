@@ -23,7 +23,7 @@ class Notes(models.Model):
 
 class LikedNotes(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
-    note = models.ForeignKey(Notes, on_delete=models.CASCADE)
+    note = models.ForeignKey(Notes, on_delete=models.CASCADE, related_name='liked_notes')
     liked_at = models.DateTimeField(auto_now_add=True)
 
     class Meta:
@@ -35,4 +35,29 @@ class LikedNotes(models.Model):
         ]
 
     def __str__(self):
-        return f'{self.user}: {self.note} - {self.liked_at}'
+        return f'{self.user.username}: {self.note} - {self.liked_at}'
+
+class FavoriteNotes(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    note = models.ForeignKey(Notes, on_delete=models.CASCADE, related_name='favorite_notes')
+    favorite_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        constraints = [
+            models.UniqueConstraint(
+                fields=['user', 'note'],
+                name='unique_favorite_note',
+            )
+        ]
+
+    def __str__(self):
+        return f'{self.user.username}: {self.note} - {self.favorite_at}'
+
+class Comments(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    note = models.ForeignKey(Notes, on_delete=models.CASCADE, limit_choices_to={'is_private': False})
+    comment = models.TextField()
+    comment_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f'{self.user.username}: {self.note} - {self.comment_at}'
